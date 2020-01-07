@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h1>My template HomePage !!!<h1>
+    <!--    logica offerta dal template engine Jinja2 
+                    i for-loop in Jingia funzionano in modo analogo 
+                    a quelli di python ed in maniera "indentica"
+                    di quelli Django
+            -->
+    {% for p in posts %}
+    <h5>{{p.title}}</h5>
+    <p>{{p.body}}</p>
+    {% endfor %}
+
+    {% if boolean_fg %}
+    <h3>
+        Bool Flag is True
+    </h3>
+    {% endif %}
+
+</div>
+{% endblock %}
