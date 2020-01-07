@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "personal-blog--python-and-flask",
+			"path": "/Users/pasqualespica/my_data/PAS7B/pers/CORSI_/udemy/blog-personale-con-python-e-flask/personal-blog--python-and-flask"
+		}
+	],
+	"settings": {
+		"python.pythonPath": "venv_flask/bin/python3"
+	}
+}
