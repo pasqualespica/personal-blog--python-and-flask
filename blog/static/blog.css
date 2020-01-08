@@ -1,0 +1,28 @@
+/* h1 {
+    color: navy ;
+} */
+
+html, body {
+    font-family: 'Raleway', sans-serif;
+    font-size:  0.875rem;
+    padding: 10px 0px 10px 0px;  
+    background-color: #f0f0f0;
+}
+
+.navbar-bg-white {
+    background-color: white;
+    border: 1px solid #d3d3d3;
+
+}
+
+.navbar-container {
+    max-width: 950px;
+}
+
+.content-container {
+    max-width: 950px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 0px;
+}
+
