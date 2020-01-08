@@ -10,16 +10,22 @@
         a quelli di python ed in maniera "indentica"
         di quelli Django
     -->
-    {% for p in posts %}
-    <h5>{{p.title}}</h5>
-    <p>{{p.body}}</p>
-    {% endfor %}
+    <div class="row no-gutters"> <!-- no-gutters elimina padding -->
+        <div class="col-md-9 order-md-2">
+            {% for p in posts %}
+            <div class="single-post-home">
+                <h5>{{p.title}}</h5>
+                <p>{{p.body}}</p>
+            </div>
+            {% endfor %}
+        </div>
 
-    {% if boolean_fg %}
-    <h3>
-        Bool Flag is True
-    </h3>
-    {% endif %}
+        <div class="col-md-3 order-md-1">
+            {%include 'about_me_snippet.html' %}
+        </div>
+    </div>
+
+
 
 </div>
 {% endblock %}

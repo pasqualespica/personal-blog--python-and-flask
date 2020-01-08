@@ -1,3 +1,10 @@
 venv_flask/*
 __pycache__/*
 blog/__pycache__/*
+migrations/alembic.ini
+migrations/env.py
+migrations/README
+migrations/script.py.mako
+migrations/__pycache__/env.cpython-37.pyc
+migrations/versions/c4f0ba1f7ec2_creazione_tabell_post_e_user.py
+migrations/versions/__pycache__/c4f0ba1f7ec2_creazione_tabell_post_e_user.cpython-37.pyc

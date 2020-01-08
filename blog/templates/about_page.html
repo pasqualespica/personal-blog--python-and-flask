@@ -1,9 +1,33 @@
 {% extends 'base.html' %}
 
-{% block title %}About Page{% endblock %}
+{% block title %}About{% endblock %}
 
 {% block content %}
-<div>
-    <h1>About Page !<h1>
+<div class="container content-container">
+    <!-- definisco nuova classe CSS content-container -->
+    <!--    
+        logica offerta dal template engine Jinja2 
+        i for-loop in Jingia funzionano in modo analogo 
+        a quelli di python ed in maniera "indentica"
+        di quelli Django
+    -->
+    <div class="row no-gutters">
+        <!-- no-gutters elimina padding -->
+        <div class="col-md-9 order-md-2">
+            <div class="about-page-block">
+                <p class="lead">About Me.</p>
+                <hr>
+                {{ lipsum() }}
+                <hr>
+            </div>
+        </div>
+
+        <div class="col-md-3 order-md-1">
+            {%include 'about_me_snippet.html' %}
+        </div>
+    </div>
+
+
+
 </div>
 {% endblock %}
