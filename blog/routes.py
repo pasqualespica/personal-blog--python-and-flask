@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+from flask import render_template, flash, redirect, url_for, abort, request # abort e request add to UPDATE POST
+from flask_login import current_user, login_user, logout_user, login_required
 
-from blog import app
+from blog import db, app
 from blog.models import Post, User
-from blog.forms import LoginForm
+from blog.forms import LoginForm, PostForm
 
 """
     views : riceve un richiesta HTTP ed elabora una risposta
@@ -25,6 +25,57 @@ def homepage():
     posts = Post.query.order_by(Post.created_at.desc()).all()
     # passare queste variabili come "context" dei nostri templates
     return render_template("homepage.html",  posts=posts)
+
+@app.route("/create-post", methods=["GET","POST"]) 
+@login_required # in questo modo solo chi e' loggato puo' chiamarlo vedi anche import login_required
+def post_create():
+    form = PostForm()
+    if form.validate_on_submit():
+        new_post = Post(title=form.title.data, body=form.body.data, description=form.description.data,
+            author=current_user)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("post_detail", post_id=new_post.id))
+    # creare un nuovo post con un nuovo render html
+    return render_template("post_editor.html", form=form)
+    
+
+@app.route("/posts/<int:post_id>/update", methods=["GET", "POST"])
+@login_required  # in questo modo solo chi e' loggato puo' chiamarlo vedi anche import login_required
+def post_update(post_id):
+    post_instance = Post.query.get_or_404(post_id)
+    #   verificare che l'user che ha creato il post e' lo stesso che sta 
+    #   facendo la richiesta di aggiornamento, in caso negativo paginda di ERROR
+    if post_instance.author != current_user:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post_instance.title = form.title.data
+        post_instance.description = form.description.data
+        post_instance.body = form.body.data
+        db.session.commit()
+        return redirect(url_for('post_detail', post_id=post_instance.id))
+    elif request.method == "GET" : 
+        #   caso la pagina venga richiesta 
+        #   e popolare il form
+        form.title.data = post_instance.title
+        form.description.data = post_instance.description
+        form.body.data = post_instance.body
+    return render_template("post_editor.html", form=form)
+
+
+# tolto GET method perche' non abbiamo nessun maschera da mostrare
+#       e la riechiesta POST e' sicuramente la piu' appropriata
+@app.route("/posts/<int:post_id>/delete", methods=["POST"])
+@login_required  # in questo modo solo chi e' loggato puo' chiamarlo vedi anche import login_required
+def post_delete(post_id):
+    post_instance = Post.query.get_or_404(post_id)
+    if post_instance.author != current_user:
+        abort(403)
+    db.session.delete(post_instance)
+    db.session.commit()
+    return redirect(url_for('homepage'))
+
 
 @app.route("/posts/<int:post_id>")
 def post_detail(post_id):

@@ -13,7 +13,14 @@
                     {{ post.created_at.strftime('%d.%m.%Y') }}
                 </p>
                 <p>
-                    {{ post.body }}
+                    {% if current_user.is_authenticated and current_user == post.author %}
+                    <a class="btn btn-sm btn-outline-success mr-1" href="{{ url_for('post_update', post_id=post.id) }}">Update</a>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#deletePostModal"> <!-- data-targer deve contenere l'id del modal definito -->
+                        Delete
+                    </button>
+                    {% endif %}
+                    {{ post.body|markdown }} <!-- markdown used-by Misaka-->
                 </p>
             </div>
         </div>
@@ -26,4 +33,8 @@
 
 
 </div>
+
+{%include 'post_delete_modal.html' %} <!-- bisogna includerlo in modo che sia sempre presente nella pagina -->
+
+
 {% endblock %}

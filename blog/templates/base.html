@@ -26,6 +26,7 @@
                     <a class="nav-item nav-link" href="#">Contacts</a>
                     <!-- Per avere questa var bisogna settare il LoginManager -->
                     {% if current_user.is_authenticated %}
+                        <a class="nav-item nav-link" href="{{ url_for('post_create') }}">Create Post</a>
                         <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a> 
                     {% endif %}
                 </div>

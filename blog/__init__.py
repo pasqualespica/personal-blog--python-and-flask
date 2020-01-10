@@ -5,9 +5,9 @@
 """
 from flask import Flask
 from flask_login import LoginManager
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_misaka import Misaka # usato per il supporto Markdown
 from config import Config
 
 app = Flask(__name__)
@@ -16,6 +16,9 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)
+
+# utile per grassetto , corsvio, elenchi puntati, intestazioni, ...
+Misaka(app) # passare q eusta la nostra instanza di flask
 
 
 # "render_as_batch" per andare incontro ai limiti di sqlite ( clone in caso di change )
