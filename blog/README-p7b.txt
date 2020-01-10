@@ -102,12 +102,37 @@ PRECEDEDNZA in questo ordine per le var di ambiente :
 >>> uuid.uuid4().hex
 '432e9eeffdd446eaac0e33879ee57bb6'
 
-
-
 ################################################################################################################################
 
 
-#### 
+#### DB migrate & upgrade
+
+from shell termnial
+
+>>> flask db migrate
+>>> flask db upgrade
+
+SLUG update form flask shell
+
+>>> for post in Post.query.all():
+...     post.slug = title_slugfier(post.title)
+...     db.session.commit()
+... 
+>>> for post in Post.query.all():
+...     post.slug
+... 
+'primo-posto-upd-pqzbya'
+'titolo1-gp0zww'
+'titolo2-n8hx27'
+'titolo3-i6rc6i'
+'primo-da-gui-e6jw85'
+'secondo-gui-htmd9c'
+'nuovo-post-mardown-gwghae'
+'misaka-xm22jk'
+'qefqef-7xast4'
+'ggg-4aw1ib'
+'4444-b2ulak'
+'4444-z0vfu5'
 
 ################################################################################################################################
 

@@ -15,7 +15,8 @@
             {% for p in posts %}
             <div class="single-post-home">
                 <h5>
-                    <a class="custom-link" href="{{ url_for('post_detail',post_id=p.id) }}">
+                    <!-- for slug change post_id=p.id into post_slug=p.slug -->
+                    <a class="custom-link" href="{{ url_for('post_detail', post_slug=p.slug) }}">
                         {{ p.title }}
                     </a>
                 </h5>

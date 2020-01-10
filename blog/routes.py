@@ -4,6 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from blog import db, app
 from blog.models import Post, User
 from blog.forms import LoginForm, PostForm
+from blog.utils import title_slugfier
 
 """
     views : riceve un richiesta HTTP ed elabora una risposta
@@ -26,16 +27,32 @@ def homepage():
     # passare queste variabili come "context" dei nostri templates
     return render_template("homepage.html",  posts=posts)
 
+
+# @app.route("/posts/<int:post_id>")
+# def post_detail(post_id):
+@app.route("/posts/<string:post_slug>")
+def post_detail(post_slug):  # adesso accetta lo slug
+    # post_instance = Post.query.get_or_404(post_id)
+    post_instance = Post.query.filter_by(slug=post_slug).first_or_404()
+    return render_template("post_detail.html", post=post_instance)
+
+    
 @app.route("/create-post", methods=["GET","POST"]) 
 @login_required # in questo modo solo chi e' loggato puo' chiamarlo vedi anche import login_required
 def post_create():
     form = PostForm()
     if form.validate_on_submit():
-        new_post = Post(title=form.title.data, body=form.body.data, description=form.description.data,
+        slug = title_slugfier(form.title.data)
+        new_post = Post(
+            title=form.title.data, 
+            body=form.body.data, 
+            slug=slug,
+            description=form.description.data,
             author=current_user)
         db.session.add(new_post)
         db.session.commit()
-        return redirect(url_for("post_detail", post_id=new_post.id))
+        # return redirect(url_for("post_detail", post_id=new_post.id))
+        return redirect(url_for("post_detail", post_slug=slug))
     # creare un nuovo post con un nuovo render html
     return render_template("post_editor.html", form=form)
     
@@ -54,7 +71,8 @@ def post_update(post_id):
         post_instance.description = form.description.data
         post_instance.body = form.body.data
         db.session.commit()
-        return redirect(url_for('post_detail', post_id=post_instance.id))
+        # return redirect(url_for('post_detail', post_id=post_instance.id))
+        return redirect(url_for('post_detail', post_slug=post_instance.slug))
     elif request.method == "GET" : 
         #   caso la pagina venga richiesta 
         #   e popolare il form
@@ -75,12 +93,6 @@ def post_delete(post_id):
     db.session.delete(post_instance)
     db.session.commit()
     return redirect(url_for('homepage'))
-
-
-@app.route("/posts/<int:post_id>")
-def post_detail(post_id):
-    post_instance = Post.query.get_or_404(post_id)
-    return render_template("post_detail.html", post=post_instance)
 
 @app.route("/about")
 def about():
