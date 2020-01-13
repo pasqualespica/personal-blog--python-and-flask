@@ -13,6 +13,7 @@ from blog.utils import title_slugfier, save_picture
 
 @app.route("/")
 def homepage():
+    page_number = request.args.get('page', 1, type=int)
     # return "<h1>Hello BLOG!<h1>"
 
     # posts = [ {"title" : "primo post", "body" : "random body1"},
@@ -22,10 +23,29 @@ def homepage():
     #                        posts=posts,
     #                        boolean_fg=some_bool_flag)
 
+    # 1-example
     # posts = Post.query.all()
-    posts = Post.query.order_by(Post.created_at.desc()).all()
+
+    # 2-example
+    # posts = Post.query.order_by(Post.created_at.desc()).all()
+
+    # 3-example
+    posts = Post.query.order_by(Post.created_at.desc()).paginate(page_number, 6, True)
+
+    # next_num and has_next defined by paginate
+    if posts.has_next:
+        next_page = url_for('homepage', page=posts.next_num) 
+    else:
+        next_page = None
+
+    if posts.has_prev:
+        prev_page = url_for('homepage', page=posts.prev_num)
+    else:
+        prev_page = None
+
     # passare queste variabili come "context" dei nostri templates
-    return render_template("homepage.html",  posts=posts)
+    return render_template("homepage.html",  posts=posts, current_page=page_number,
+                           next_page=next_page, prev_page=prev_page)
 
 
 # @app.route("/posts/<int:post_id>")
@@ -101,7 +121,9 @@ def post_update(post_id):
         form.title.data = post_instance.title
         form.description.data = post_instance.description
         form.body.data = post_instance.body
-    return render_template("post_editor.html", form=form)
+    # this row to show also image into editor preview
+    post_image = post_instance.image or None
+    return render_template("post_editor.html", form=form, post_image=post_image)
 
 
 # tolto GET method perche' non abbiamo nessun maschera da mostrare
@@ -119,6 +141,10 @@ def post_delete(post_id):
 @app.route("/about")
 def about():
     return render_template('about_page.html')
+
+@app.route("/contact")
+def contact():
+    return render_template('contact_page.html')
 
 
 @app.route("/login", methods=["GET","POST"]) 

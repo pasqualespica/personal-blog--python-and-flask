@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}{% endblock %} - Personal Blog</title>
+    <title>{% block title %}{% endblock %} - CodingP7b</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='blog.css') }}">
@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light navbar-bg-white">
         <div class="container navbar-container" >
-            <a class="navbar-brand" href="#">CodingP7b</a>
+            <a class="navbar-brand" href="{{ url_for('homepage') }}">CodingP7b</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -21,12 +21,12 @@
         
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="navbar-nav ml-auto">
-                    <a class="nav-item nav-link" href="{{ url_for('homepage') }}">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a> <!-- nome della view in url_for -->
-                    <a class="nav-item nav-link" href="#">Contacts</a>
+                    <a class="nav-item nav-link{% if request.path == '/'%} active{% endif%}" href="{{ url_for('homepage') }}">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link{% if request.path == '/about'%} active{% endif%}" href="{{ url_for('about') }}">About</a> <!-- nome della view in url_for -->
+                    <a class="nav-item nav-link{% if request.path == '/contact'%} active{% endif%}" href="{{ url_for('contact') }}">Contacts</a>
                     <!-- Per avere questa var bisogna settare il LoginManager -->
                     {% if current_user.is_authenticated %}
-                        <a class="nav-item nav-link" href="{{ url_for('post_create') }}">Create Post</a>
+                        <a class="nav-item nav-link{% if request.path == '/create-post'%} active{% endif%}" href="{{ url_for('post_create') }}">Create Post</a>
                         <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a> 
                     {% endif %}
                 </div>

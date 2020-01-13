@@ -12,7 +12,8 @@
     -->
     <div class="row no-gutters"> <!-- no-gutters elimina padding -->
         <div class="col-md-9 order-md-2">
-            {% for p in posts %}
+            <!-- Add .items becaouse after add pagination here we have a pagination-object  -->
+            {% for p in posts.items %} 
             <div class="single-post-home">
                 <h5>
                     <!-- for slug change post_id=p.id into post_slug=p.slug -->
@@ -24,11 +25,27 @@
                 {% if p.description %}
                 <p class="p-small-one text-muted mb-0">
                     {{ p.description }}
+                    <a class="read-more" href="{{ url_for('post_detail', post_slug=p.slug) }}">Read article</a>
                 </p>
                 {% endif %}
                 <!-- <p>{{ p.body }}</p> -->
             </div>
             {% endfor %}
+
+            <div class="pagination-block">
+                {% if prev_page %}
+                    {% if current_page == 2 %}
+                    <a class="btn btn-sm btn-outline-secondary" href="/">⤾ Prev</a>     
+                    {% else %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ prev_page }}">⤾ Prev</a>
+                    {% endif %}
+                {% endif %}
+
+                {% if next_page %}
+                <a class="btn btn-sm btn-outline-secondary" href="{{ next_page }}">⤿ Next</a>
+                {% endif %}
+            </div>
+
         </div>
 
         <div class="col-md-3 order-md-1">
