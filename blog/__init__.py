@@ -28,7 +28,7 @@ with app.app_context():
     else: 
         migrate.init_app(app, db)
 
-from blog import models, routes
+from blog import models, routes, errors
 """
     1. flask db init
     2. flask db migrate -m "Creazione Tabelle Post e User"
