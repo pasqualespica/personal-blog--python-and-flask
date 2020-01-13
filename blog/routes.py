@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from blog import db, app
 from blog.models import Post, User
 from blog.forms import LoginForm, PostForm
-from blog.utils import title_slugfier
+from blog.utils import title_slugfier, save_picture
 
 """
     views : riceve un richiesta HTTP ed elabora una risposta
@@ -49,6 +49,17 @@ def post_create():
             slug=slug,
             description=form.description.data,
             author=current_user)
+
+        if  form.image.data:
+            try : # try in caso di image corrotta 
+                image = save_picture(form.image.data) # return path
+                new_post.image = image
+            except Exception:
+                db.session.add(new_post)
+                db.session.commit()
+                flash("Si e' verifcato un problema con l'immagina caricata !!!")
+                return redirect(url_for('post_update', post_id=new_post.id))
+
         db.session.add(new_post)
         db.session.commit()
         # return redirect(url_for("post_detail", post_id=new_post.id))
@@ -70,6 +81,17 @@ def post_update(post_id):
         post_instance.title = form.title.data
         post_instance.description = form.description.data
         post_instance.body = form.body.data
+
+        if  form.image.data:
+            try : # try in caso di image corrotta 
+                print(form.image.data)
+                image = save_picture(form.image.data) # return path
+                post_instance.image = image
+            except Exception:
+                db.session.commit()
+                flash("Si e' verifcato un problema con l'immagina caricata !!!")
+                return redirect(url_for('post_update', post_id=post_instance.id))
+
         db.session.commit()
         # return redirect(url_for('post_detail', post_id=post_instance.id))
         return redirect(url_for('post_detail', post_slug=post_instance.slug))

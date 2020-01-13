@@ -1,4 +1,6 @@
 from flask_wtf import FlaskForm
+# add to use image
+from flask_wtf.file import FileField, FileAllowed 
 #                   optional      
 from wtforms import BooleanField, PasswordField, StringField, SubmitField, TextAreaField
 #validatore
@@ -19,4 +21,5 @@ class PostForm(FlaskForm): # deve rispecchiare i campi del "model" Psot
     description = TextAreaField("Description", 
         validators=[Length(max=240, message="massimo 140 caratteri")])
     body = TextAreaField("Content-body", validators=[DataRequired("CAMPO OBBLIGATORIO !!!")])
+    image = FileField('Copertina Articolo', validators=[FileAllowed(['jpg','jpeg','png'])])
     submit = SubmitField('Publish-it')
